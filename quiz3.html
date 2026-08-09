@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>问答3</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #f2f2f2;
+    }
+
+    body {
+      display: grid;
+      place-items: start center;
+      perspective: 1200px;
+      overflow: hidden;
+    }
+
+    .frame {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      overflow: hidden;
+      background: #fff;
+      transform-origin: center;
+    }
+
+    .frame.is-turning {
+      animation: page-turn 1s cubic-bezier(0.55, 0.02, 0.34, 1) forwards;
+      pointer-events: none;
+    }
+
+    @keyframes page-turn {
+      0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(0) rotateY(0deg) scale(1);
+      }
+
+      45% {
+        opacity: 0.92;
+        filter: blur(0.6px) brightness(1.08);
+        transform: translateX(-7%) rotateY(-18deg) scale(0.985);
+      }
+
+      100% {
+        opacity: 0;
+        filter: blur(5px) brightness(0.8);
+        transform: translateX(-105%) rotateY(-42deg) scale(0.94);
+      }
+    }
+
+    .cover {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .top-home-link {
+      position: absolute;
+      left: 2.8%;
+      top: 5.5%;
+      width: 11%;
+      height: 6.5%;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 16;
+    }
+
+    .top-home-link:focus-visible {
+      outline: 3px solid #1683ff;
+      outline-offset: 2px;
+    }
+
+    .back-link {
+      position: absolute;
+      left: 3.5%;
+      top: 89.7%;
+      width: 16%;
+      height: 8%;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 10;
+    }
+
+    .back-link:focus-visible {
+      outline: 3px solid #1683ff;
+      outline-offset: 2px;
+    }
+
+    .next-link {
+      position: absolute;
+      left: 80.5%;
+      top: 89.7%;
+      width: 16%;
+      height: 8%;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 10;
+    }
+
+    .next-link:focus-visible {
+      outline: 3px solid #1683ff;
+      outline-offset: 2px;
+    }
+
+    .answer-option {
+      position: absolute;
+      display: block;
+      appearance: none;
+      -webkit-appearance: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      cursor: pointer;
+      z-index: 12;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .answer-option.is-selected {
+      background: #ffd84d;
+      mix-blend-mode: multiply;
+    }
+
+    .answer-option:focus-visible {
+      outline: 3px solid #1683ff;
+      outline-offset: 2px;
+    }
+
+    .answer-a { left: 212px; top: 267px; width: 138px; height: 32px; }
+    .answer-b { left: 53px; top: 338px; width: 154px; height: 32px; }
+    .answer-c { left: 181px; top: 423px; width: 152px; height: 32px; }
+    .answer-d { left: 49px; top: 490px; width: 152px; height: 32px; }
+
+    @media (max-width: 374px) {
+      .frame {
+        width: 100vw;
+        height: calc(100vw * 812 / 375);
+      }
+    }
+  </style>
+  <script src="js/ambient-music.js" defer></script>
+</head>
+<body>
+  <main class="frame" aria-label="问答3，375×812">
+    <img
+      class="cover"
+      src="assets/svg/quiz3.svg"
+      width="375"
+      height="812"
+      alt="恋爱饭搭子人格测试问答第三页"
+    >
+    <a class="top-home-link" href="index.html" aria-label="返回首页"></a>
+    <a class="back-link" href="quiz2.html" aria-label="返回问答第二页"></a>
+    <a class="next-link" href="quiz4.html" aria-label="进入问答第四页"></a>
+    <button class="answer-option answer-a" data-choice="A" type="button" aria-label="选择答案 A"></button>
+    <button class="answer-option answer-b" data-choice="B" type="button" aria-label="选择答案 B"></button>
+    <button class="answer-option answer-c" data-choice="C" type="button" aria-label="选择答案 C"></button>
+    <button class="answer-option answer-d" data-choice="D" type="button" aria-label="选择答案 D"></button>
+  </main>
+  <script src="js/quiz-results.js"></script>
+  <script>
+    const answerOptions = document.querySelectorAll('.answer-option');
+    const pageFrame = document.querySelector('.frame');
+    let isNavigating = false;
+
+    answerOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        if (isNavigating) return;
+
+        isNavigating = true;
+        recordQuizAnswer(3, option.dataset.choice);
+        option.classList.add('is-selected');
+        answerOptions.forEach((item) => {
+          item.disabled = true;
+        });
+
+        window.setTimeout(() => {
+          pageFrame.classList.add('is-turning');
+          window.setTimeout(() => {
+            window.location.href = 'quiz4.html';
+          }, 1000);
+        }, 1000);
+      });
+    });
+  </script>
+</body>
+</html>
